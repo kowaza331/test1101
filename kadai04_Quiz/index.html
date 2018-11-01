@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang='ja'>
+
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <title>でんしゃクイズ</title>
+    <link rel='stylesheet' href='./css/reset.css'>
+    <link rel='stylesheet' href='./css/bootstrap.min.css'>
+    <link rel='stylesheet' href='./css/style.css'>
+
+</head>
+
+<body>
+    <header id="head">
+        <h1 id="title" class="text-danger bg-info" style="margin-bottom:0px">でんしゃクイズ</h1>
+        <h1 id="question" class="bg-info"> ここに問題が出題されます</h1>
+        <div id="seikairitu_00">
+            <p id="seikairitu"></p>
+        </div>
+    </header>
+    <div class="container1">
+        <div class="row1">
+            <input id="11" type="radio" name="toi" value="1">
+            <label for="11" id="toi1">
+            </label>
+            <input id="22" type="radio" name="toi" value="2">
+            <label for="22" id="toi2">
+            </label>
+            <input id="33" type="radio" name="toi" value="3">
+            <label for="33" id="toi3">
+            </label>
+            <input id="44" type="radio" name="toi" value="4">
+            <label for="44" id="toi4">
+            </label>
+        </div>
+    </div>
+    <div id="result_01">
+        <div id="result_03">
+            <h1 id="re_title">結果</h1>
+        </div>
+        <div id="result_02">
+            <p id="re_kekka">結果</p>
+        </div>
+    </div>
+    <div id="setumei_01" class="active">
+        <div id="setumei_02">
+            <h1 id="setumei_03" class="text-danger">開始</h1>
+        </div>
+    </div>
+
+    <script src='./js/jquery-2.1.3.min.js'></script>
+    <script>
+
+        //////////////////////////
+        // 変わらない配列たち
+        //////////////////////////
+
+        //  配列にナンバリング
+        let num = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+        const num_bk = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+
+        //  電車の読み方
+        const qs = ["のぞみ", "はやぶさ", "こまち", "つばさ", "かがやき", "やまびこ", "レッドアロークラシック", "ニューレッドアロー", "京成線スカイライナー",
+            "成田エクスプレス", "サンダーバード", "山の手線", "江ノ電", "しまかぜ", "伊勢志摩ライナー", "神戸市営地下鉄", "ラピート", "ゆりかもめ", "小田急線", "琴電"];
+
+        //  写真のアドレスたち
+        const photo = [
+            '<img src= ./img/01_n700a_nozomi.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/02_e5hayabusa.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/03_e6_komati.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/04_e3_tubasa.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/05_e7_kagayaki.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/06_e2_yamabiko.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/11_seibu_redarrowclassic.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/12_seibu_newredarrow.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/13_keisei_skyliner.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/14_e259_naritaExpres.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/15_683_thuderBird.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/16_e231_yamanote.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/17_2000_enoden.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/20_kintetsu50000_simakaze.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/21_kintetsu_23000a_isesimaliner.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/22_kobe3000.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/23_50000_rapiet.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/24_7300_yurikamome.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/25_70000_odakyu.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">',
+            '<img src= ./img/26_1300_kotoden.jpg style="width:100%"><img src= ./img/maru.png style="width:40%" class="maru hide">'
+        ];
+
+        const mp3 = [
+            "img/mp3/0.mp3",
+            "img/mp3/1.mp3",
+            "img/mp3/2.mp3",
+            "img/mp3/3.mp3",
+            "img/mp3/4.mp3",
+            "img/mp3/5.mp3",
+            "img/mp3/6.mp3",
+            "img/mp3/7.mp3",
+            "img/mp3/8.mp3",
+            "img/mp3/9.mp3",
+            "img/mp3/10.mp3",
+            "img/mp3/11.mp3",
+            "img/mp3/12.mp3",
+            "img/mp3/13.mp3",
+            "img/mp3/14.mp3",
+            "img/mp3/15.mp3",
+            "img/mp3/16.mp3",
+            "img/mp3/17.mp3",
+            "img/mp3/18.mp3",
+            "img/mp3/19.mp3",
+            "img/mp3/20.mp3"
+        ]
+
+        //  変化していく数字たち
+
+        //  総問題数を定義
+        let totalQ = 10;
+
+        //   現在の問題番号を定義
+        let mondai = 1;
+        let seikai = 0;
+        let matigai = 0;
+
+        ////////////////////////////////////////
+        /// シーン１ ： 配列の中からランダムな数字を４つ選ぼう
+        ////////////////////////////////////////
+
+        //  この関数で指定された数だけ乱数を取得する関数
+        function choose_at_random(arrayData, countA) {
+            var countA = countA || 1;
+            var arrayData = arrayData;
+            var result = [];
+            for (let i = 0; i < countA; i++) {
+                let arrayIndex = Math.floor(Math.random() * arrayData.length);
+                result[i] = arrayData[arrayIndex];
+                // 1回選択された値は削除して再度選ばれないようにする
+                arrayData.splice(arrayIndex, 1);
+            }
+            return result;
+        };
+
+        //  その中から正解を決定する関数
+        function choose_at_random2(arrayData, countA) {
+            var countA = countA || 1;
+            var arrayData = arrayData;
+            var result = [];
+            for (let i = 0; i < countA; i++) {
+                let arrayIndex = Math.floor(Math.random() * arrayData.length);
+                result[i] = arrayData[arrayIndex];
+            }
+            return result;
+        };
+
+        var ranN = [0, 0, 0, 0];
+        var ansN = [0];
+
+        //   乱数に従って問題を表示する関数
+        let getQuiz = function () {
+
+            //  今回のランダムな数字を確定
+            num = num_bk.slice(0, num_bk.length);
+            ranN = choose_at_random(num, 4); // ランダムな４個
+            ansN = choose_at_random2(ranN, 1); //  ４個の中から正解を決定
+
+            console.log(mondai + "番目に選ばれた番号は" + ranN);
+            console.log(mondai + "番目の正解の番号は" + ansN);
+
+            //  画像のアドレスを変数に
+            let S1 = photo[ranN[0]];
+            let S2 = photo[ranN[1]];
+            let S3 = photo[ranN[2]];
+            let S4 = photo[ranN[3]];
+
+            // console.log("①画像のアドレスは" + S1);
+            // console.log("②画像のアドレスは" + S2);
+            // console.log("③画像のアドレスは" + S3);
+            // console.log("④画像のアドレスは" + S4);
+
+            let audio_q = new Audio(mp3[ansN]);
+            audio_q.play();
+
+
+            $("#question").html("第" + mondai + "問   " + qs[ansN] + "はどれ？"); // 問題文を表示
+            $('#toi1').html(S1);//①の画像を表示
+            $('#toi2').html(S2);//②の画像を表示
+            $('#toi3').html(S3);//③の画像を表示
+            $('#toi4').html(S4);//④の画像を表示
+        }
+
+
+        //  結果画面を表示
+        // 説明画面
+
+        let result_00 = function () {
+            $("#result_01").addClass("active");
+        }
+        let result_10 = function () {
+            $("#result_01").removeClass("active");
+        }
+
+        //  ページが読み込まれたら処理１を行う
+        // $(document).ready(getQuiz);
+
+        $('#setumei_01').on('click', function () {
+            $("#setumei_01").removeClass("active");
+            setTimeout(function () {
+                getQuiz();
+            }, 500);
+        });
+
+
+        ////////////////////////////////////////
+        /// シーン２：ユーザーが選択したら
+        ////////////////////////////////////////
+
+        $('[name="toi"]').on('click', function () {
+            // console.log("配列の残りは" + num);
+
+            let selectNunber = ($(this).val()) * 1;
+            let userSelect = [ranN[selectNunber - 1]] * 1;
+            let ansA = (ansN) * 1;
+
+            console.log(mondai + "番目の問題：選んだ解答は:" + userSelect);
+            console.log(mondai + "番目の問題：正解は:" + ansA);
+
+            //  正解かどうかの判定
+            if (userSelect === ansA) {
+                // 正解だったら
+                console.log("正解だよ");
+                let audio_o = new Audio("img/audio_o.mp3");
+                audio_o.play();
+                seikai++;
+                let toiid = "#toi" + selectNunber;
+
+                $(".row1 input").empty();
+                mondai++;
+
+                setTimeout(function () {
+                    $(".maru").addClass("hide")
+                }, 2000);
+
+
+                setTimeout(function () {
+                    $(".hidden").removeClass("hidden")
+                }, 2000);
+
+                if (mondai > 10) {
+                    result_00();
+                } else {
+                    $('toiid > .maru').removeClass("hide")
+                    setTimeout(function () {
+                        getQuiz();
+
+                    }, 2000);
+
+                };
+            } else {
+                //  不正解だったら
+
+                // 非表示にしていく
+                $("#toi" + selectNunber).addClass("hidden")
+                console.log("間違いだよ");
+                var audio_x = new Audio("img/audio_x.mp3");
+                audio_x.play();
+                matigai++;
+            }
+
+            // 次の問題に進む
+            $('#seikairitu').html("間違えた回数は" + matigai + "回")
+            $('#re_kekka').html("間違えた回数は１０問中" + matigai + "回");//今あるデータを取得
+
+        });
+
+        $('#result_01').on('click', function () {
+            location.reload();
+        });
+
+
+
+    </script>
+</body>
+
+</html>
